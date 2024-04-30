@@ -5,6 +5,11 @@ import (
 	"fmt"
 	"math/big"
 	"os"
+	"net/http"
+    "io/ioutil"
+    "log"
+	"math/big"
+    "time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -306,13 +311,29 @@ func (o *Operator) Start(ctx context.Context) error {
 func (o *Operator) ProcessNewTaskCreatedLog(newTaskCreatedLog *cstaskmanager.ContractIncredibleSquaringTaskManagerNewTaskCreated) *cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse {
 	o.logger.Debug("Received new task", "task", newTaskCreatedLog)
 	o.logger.Info("Received new task",
-		"numberToBeSquared", newTaskCreatedLog.Task.NumberToBeSquared,
+		"dateToGetDolarFrom", newTaskCreatedLog.Task.DolarDatetime,
 		"taskIndex", newTaskCreatedLog.TaskIndex,
 		"taskCreatedBlock", newTaskCreatedLog.Task.TaskCreatedBlock,
 		"quorumNumbers", newTaskCreatedLog.Task.QuorumNumbers,
 		"QuorumThresholdPercentage", newTaskCreatedLog.Task.QuorumThresholdPercentage,
 	)
-	numberSquared := big.NewInt(0).Exp(newTaskCreatedLog.Task.NumberToBeSquared, big.NewInt(2), nil)
+	//numberSquared := big.NewInt(0).Exp(newTaskCreatedLog.Task.DolarDatetime, big.NewInt(2), nil)
+	 t := time.Unix(newTaskCreatedLog.Task.DolarDatetime.Int64(), 0)
+	 dateString := t.Format("2006-01-02")
+	// Llamada a la API de Bluelytics
+	resp, err := http.Get("https://api.bluelytics.com.ar/v2/historical?day="+dateString+"&symbol=dolar")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(body))
+
 	taskResponse := &cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse{
 		ReferenceTaskIndex: newTaskCreatedLog.TaskIndex,
 		NumberSquared:      numberSquared,
