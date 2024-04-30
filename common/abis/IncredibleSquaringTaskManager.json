@@ -36,7 +36,7 @@
         "components": [
           {
             "internalType": "uint256",
-            "name": "numberToBeSquared",
+            "name": "DolarDatetime",
             "type": "uint256"
           },
           {
@@ -431,7 +431,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "numberToBeSquared",
+        "name": "DolarDatetime",
         "type": "uint256"
       },
       {
@@ -808,7 +808,7 @@
         "components": [
           {
             "internalType": "uint256",
-            "name": "numberToBeSquared",
+            "name": "DolarDatetime",
             "type": "uint256"
           },
           {
@@ -914,7 +914,7 @@
         "components": [
           {
             "internalType": "uint256",
-            "name": "numberToBeSquared",
+            "name": "DolarDatetime",
             "type": "uint256"
           },
           {
