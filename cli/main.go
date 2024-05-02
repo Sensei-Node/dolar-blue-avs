@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/Layr-Labs/incredible-squaring-avs/cli/actions"
-	"github.com/Layr-Labs/incredible-squaring-avs/core/config"
+	"github.com/Sensei-Node/dolar-blue-avs/cli/actions"
+	"github.com/Sensei-Node/dolar-blue-avs/core/config"
 	"github.com/urfave/cli"
 )
 

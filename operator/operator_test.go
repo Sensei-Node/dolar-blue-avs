@@ -14,11 +14,11 @@ import (
 
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 
-	"github.com/Layr-Labs/incredible-squaring-avs/aggregator"
-	aggtypes "github.com/Layr-Labs/incredible-squaring-avs/aggregator/types"
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
-	chainiomocks "github.com/Layr-Labs/incredible-squaring-avs/core/chainio/mocks"
-	operatormocks "github.com/Layr-Labs/incredible-squaring-avs/operator/mocks"
+	"github.com/Sensei-Node/dolar-blue-avs/aggregator"
+	aggtypes "github.com/Sensei-Node/dolar-blue-avs/aggregator/types"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	chainiomocks "github.com/Sensei-Node/dolar-blue-avs/core/chainio/mocks"
+	operatormocks "github.com/Sensei-Node/dolar-blue-avs/operator/mocks"
 )
 
 func TestOperator(t *testing.T) {
@@ -39,10 +39,12 @@ func TestOperator(t *testing.T) {
 			Raw: types.Log{},
 		}
 		got := operator.ProcessNewTaskCreatedLog(newTaskCreatedLog)
-		numberSquared := big.NewInt(0).Mul(DolarDatetime, DolarDatetime)
+
+		expectedDolarResponse, err := aggregator.getDolarValue(mockTask.DolarDatetime)
+		expectedDolarResponseBigInt := big.NewInt(int64(expectedDolarResponse))
 		want := &cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse{
 			ReferenceTaskIndex: taskIndex,
-			NumberSquared:      numberSquared,
+			DolarDatetime:      expectedDolarResponseBigInt,
 		}
 		assert.Equal(t, got, want)
 	})

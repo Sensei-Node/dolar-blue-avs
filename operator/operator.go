@@ -5,22 +5,20 @@ import (
 	"fmt"
 	"math/big"
 	"os"
-	"net/http"
     "io/ioutil"
     "log"
-	"math/big"
     "time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/Layr-Labs/incredible-squaring-avs/aggregator"
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
-	"github.com/Layr-Labs/incredible-squaring-avs/core"
-	"github.com/Layr-Labs/incredible-squaring-avs/core/chainio"
-	"github.com/Layr-Labs/incredible-squaring-avs/metrics"
-	"github.com/Layr-Labs/incredible-squaring-avs/types"
+	"github.com/Sensei-Node/dolar-blue-avs/aggregator"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	"github.com/Sensei-Node/dolar-blue-avs/core"
+	"github.com/Sensei-Node/dolar-blue-avs/core/chainio"
+	"github.com/Sensei-Node/dolar-blue-avs/metrics"
+	"github.com/Sensei-Node/dolar-blue-avs/types"
 
 	"github.com/Layr-Labs/eigensdk-go/chainio/clients"
 	sdkelcontracts "github.com/Layr-Labs/eigensdk-go/chainio/clients/elcontracts"
@@ -317,26 +315,16 @@ func (o *Operator) ProcessNewTaskCreatedLog(newTaskCreatedLog *cstaskmanager.Con
 		"quorumNumbers", newTaskCreatedLog.Task.QuorumNumbers,
 		"QuorumThresholdPercentage", newTaskCreatedLog.Task.QuorumThresholdPercentage,
 	)
-	//numberSquared := big.NewInt(0).Exp(newTaskCreatedLog.Task.DolarDatetime, big.NewInt(2), nil)
-	 t := time.Unix(newTaskCreatedLog.Task.DolarDatetime.Int64(), 0)
-	 dateString := t.Format("2006-01-02")
-	// Llamada a la API de Bluelytics
-	resp, err := http.Get("https://api.bluelytics.com.ar/v2/historical?day="+dateString+"&symbol=dolar")
+	dolarResponse, err := aggregator.getDolarValue(newTaskCreatedLog.Task.DolarDatetime.Int32())
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error:", err)
+		return
 	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(string(body))
-
+	// Print the response
+	fmt.Println("Dolar Response:", dolarResponse)
 	taskResponse := &cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse{
 		ReferenceTaskIndex: newTaskCreatedLog.TaskIndex,
-		NumberSquared:      numberSquared,
+		DolarDatetime:      dolarResponse,
 	}
 	return taskResponse
 }

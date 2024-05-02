@@ -3,7 +3,7 @@ package types
 import (
 	"errors"
 
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
 )
 
 type TaskResponseData struct {

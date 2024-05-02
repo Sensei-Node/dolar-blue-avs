@@ -8,9 +8,9 @@ import (
 
 	"github.com/urfave/cli"
 
-	"github.com/Layr-Labs/incredible-squaring-avs/core/config"
-	"github.com/Layr-Labs/incredible-squaring-avs/operator"
-	"github.com/Layr-Labs/incredible-squaring-avs/types"
+	"github.com/Sensei-Node/dolar-blue-avs/core/config"
+	"github.com/Sensei-Node/dolar-blue-avs/operator"
+	"github.com/Sensei-Node/dolar-blue-avs/types"
 
 	sdkutils "github.com/Layr-Labs/eigensdk-go/utils"
 )

@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"net/rpc"
 
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
-	"github.com/Layr-Labs/incredible-squaring-avs/core"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	"github.com/Sensei-Node/dolar-blue-avs/core"
 
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	sdktypes "github.com/Layr-Labs/eigensdk-go/types"

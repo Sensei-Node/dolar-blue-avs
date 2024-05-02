@@ -9,9 +9,9 @@ import (
 	gethcommon "github.com/ethereum/go-ethereum/common"
 
 	regcoord "github.com/Layr-Labs/eigensdk-go/contracts/bindings/RegistryCoordinator"
-	erc20mock "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/ERC20Mock"
-	csservicemanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringServiceManager"
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	erc20mock "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/ERC20Mock"
+	csservicemanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringServiceManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
 )
 
 type AvsManagersBindings struct {

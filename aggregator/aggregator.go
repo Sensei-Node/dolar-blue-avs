@@ -5,6 +5,9 @@ import (
 	"math/big"
 	"sync"
 	"time"
+	"net/http"
+    "io/ioutil"
+	"encoding/json"
 
 	"github.com/Layr-Labs/eigensdk-go/logging"
 
@@ -14,12 +17,12 @@ import (
 	blsagg "github.com/Layr-Labs/eigensdk-go/services/bls_aggregation"
 	oppubkeysserv "github.com/Layr-Labs/eigensdk-go/services/operatorpubkeys"
 	sdktypes "github.com/Layr-Labs/eigensdk-go/types"
-	"github.com/Layr-Labs/incredible-squaring-avs/aggregator/types"
-	"github.com/Layr-Labs/incredible-squaring-avs/core"
-	"github.com/Layr-Labs/incredible-squaring-avs/core/chainio"
-	"github.com/Layr-Labs/incredible-squaring-avs/core/config"
+	"github.com/Sensei-Node/dolar-blue-avs/aggregator/types"
+	"github.com/Sensei-Node/dolar-blue-avs/core"
+	"github.com/Sensei-Node/dolar-blue-avs/core/chainio"
+	"github.com/Sensei-Node/dolar-blue-avs/core/config"
 
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
 )
 
 const (
@@ -74,6 +77,19 @@ type Aggregator struct {
 	tasksMu               sync.RWMutex
 	taskResponses         map[types.TaskIndex]map[sdktypes.TaskResponseDigest]cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse
 	taskResponsesMu       sync.RWMutex
+}
+
+type DolarResponse struct {
+	Oficial struct {
+		ValueAvg  float64 `json:"value_avg"`
+		ValueSell float64 `json:"value_sell"`
+		ValueBuy  float64 `json:"value_buy"`
+	} `json:"oficial"`
+	Blue struct {
+		ValueAvg  float64 `json:"value_avg"`
+		ValueSell float64 `json:"value_sell"`
+		ValueBuy  float64 `json:"value_buy"`
+	} `json:"blue"`
 }
 
 // NewAggregator creates a new Aggregator with the provided config.
@@ -195,10 +211,10 @@ func (agg *Aggregator) sendAggregatedResponseToContract(blsAggServiceResp blsagg
 
 // sendNewTask sends a new task to the task manager contract, and updates the Task dict struct
 // with the information of operators opted into quorum 0 at the block of task creation.
-func (agg *Aggregator) sendNewTask(numToSquare *big.Int) error {
-	agg.logger.Info("Aggregator sending new task", "numberToSquare", numToSquare)
+func (agg *Aggregator) sendNewTask(unixTimestamp *big.Int) error {
+	agg.logger.Info("Aggregator sending new task", "dolar timestamp", unixTimestamp)
 	// Send number to square to the task manager contract
-	newTask, taskIndex, err := agg.avsWriter.SendNewTaskNumberToSquare(context.Background(), numToSquare, types.QUORUM_THRESHOLD_NUMERATOR, types.QUORUM_NUMBERS)
+	newTask, taskIndex, err := agg.avsWriter.SendNewTaskGetDolarValue(context.Background(), unixTimestamp, types.QUORUM_THRESHOLD_NUMERATOR, types.QUORUM_NUMBERS)
 	if err != nil {
 		agg.logger.Error("Aggregator failed to send number to square", "err", err)
 		return err
@@ -217,4 +233,33 @@ func (agg *Aggregator) sendNewTask(numToSquare *big.Int) error {
 	taskTimeToExpiry := taskChallengeWindowBlock * blockTimeSeconds
 	agg.blsAggregationService.InitializeNewTask(taskIndex, newTask.TaskCreatedBlock, newTask.QuorumNumbers, quorumThresholdPercentages, taskTimeToExpiry)
 	return nil
+}
+
+// Function to get dollar value from the API
+func getDolarValue(timestamp uint32) (uint32, error) {
+	// Convert to api format
+	t := time.Unix(int64(timestamp), 0)
+	dateString := t.Format("2006-01-02")
+
+	// Make API call
+	resp, err := http.Get("https://api.bluelytics.com.ar/v2/historical?day=" + dateString + "&symbol=dolar")
+	if err != nil {
+		return 0, err
+	}
+	defer resp.Body.Close()
+
+	// Read response body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return 0, err
+	}
+
+	// Unmarshal JSON response
+	var data DolarResponse
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return 0, err
+	}
+
+	return uint32(data.Blue.ValueAvg), nil
 }

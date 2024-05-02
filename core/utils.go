@@ -4,7 +4,7 @@ import (
 	"math/big"
 
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"golang.org/x/crypto/sha3"
 )
@@ -20,7 +20,7 @@ func AbiEncodeTaskResponse(h *cstaskmanager.IIncredibleSquaringTaskManagerTaskRe
 			Type: "uint32",
 		},
 		{
-			Name: "numberSquared",
+			Name: "dolarDatetime",
 			Type: "uint256",
 		},
 	})

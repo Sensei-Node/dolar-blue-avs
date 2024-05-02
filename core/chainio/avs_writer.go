@@ -12,16 +12,16 @@ import (
 	"github.com/Layr-Labs/eigensdk-go/chainio/txmgr"
 	logging "github.com/Layr-Labs/eigensdk-go/logging"
 
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
-	"github.com/Layr-Labs/incredible-squaring-avs/core/config"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	"github.com/Sensei-Node/dolar-blue-avs/core/config"
 )
 
 type AvsWriterer interface {
 	avsregistry.AvsRegistryWriter
 
-	SendNewTaskNumberToSquare(
+	SendNewTaskGetDolarValue(
 		ctx context.Context,
-		numToSquare *big.Int,
+		timestamp *big.Int,
 		quorumThresholdPercentage uint32,
 		quorumNumbers []byte,
 	) (cstaskmanager.IIncredibleSquaringTaskManagerTask, uint32, error)
@@ -75,13 +75,13 @@ func NewAvsWriter(avsRegistryWriter avsregistry.AvsRegistryWriter, avsServiceBin
 }
 
 // returns the tx receipt, as well as the task index (which it gets from parsing the tx receipt logs)
-func (w *AvsWriter) SendNewTaskNumberToSquare(ctx context.Context, numToSquare *big.Int, quorumThresholdPercentage uint32, quorumNumbers []byte) (cstaskmanager.IIncredibleSquaringTaskManagerTask, uint32, error) {
+func (w *AvsWriter) SendNewTaskGetDolarValue(ctx context.Context, timestamp *big.Int, quorumThresholdPercentage uint32, quorumNumbers []byte) (cstaskmanager.IIncredibleSquaringTaskManagerTask, uint32, error) {
 	txOpts, err := w.TxMgr.GetNoSendTxOpts()
 	if err != nil {
 		w.logger.Errorf("Error getting tx opts")
 		return cstaskmanager.IIncredibleSquaringTaskManagerTask{}, 0, err
 	}
-	tx, err := w.AvsContractBindings.TaskManager.CreateNewTask(txOpts, numToSquare, quorumThresholdPercentage, quorumNumbers)
+	tx, err := w.AvsContractBindings.TaskManager.CreateNewTask(txOpts, timestamp, quorumThresholdPercentage, quorumNumbers)
 	if err != nil {
 		w.logger.Errorf("Error assembling CreateNewTask tx")
 		return cstaskmanager.IIncredibleSquaringTaskManagerTask{}, 0, err

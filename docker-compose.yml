@@ -23,18 +23,19 @@ services:
   aggregator:
     image: ghcr.io/layr-labs/incredible-squaring/aggregator/cmd/main.go:latest
     container_name: incredible-squaring-aggregator
+    restart: unless-stopped
     depends_on:
       anvil:
         condition: service_started
     volumes:
       - ./:/incredible-squaring/
     working_dir: /incredible-squaring
-    command: 
-      - --config 
+    command:
+      - --config
       - config-files/aggregator-docker-compose.yaml
-      - --credible-squaring-deployment 
+      - --credible-squaring-deployment
       - contracts/script/output/31337/credible_squaring_avs_deployment_output.json
-      - --ecdsa-private-key 
+      - --ecdsa-private-key
       - "0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6"
     networks:
       - incredible-squaring-network
@@ -42,6 +43,7 @@ services:
   operator1:
     image: ghcr.io/layr-labs/incredible-squaring/operator/cmd/main.go:latest
     container_name: incredible-squaring-operator1
+    restart: unless-stopped
     depends_on:
       anvil:
         condition: service_started

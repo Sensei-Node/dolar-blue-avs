@@ -5,8 +5,8 @@ import (
 	"net/rpc"
 	"time"
 
-	"github.com/Layr-Labs/incredible-squaring-avs/aggregator"
-	"github.com/Layr-Labs/incredible-squaring-avs/metrics"
+	"github.com/Sensei-Node/dolar-blue-avs/aggregator"
+	"github.com/Sensei-Node/dolar-blue-avs/metrics"
 
 	"github.com/Layr-Labs/eigensdk-go/logging"
 )

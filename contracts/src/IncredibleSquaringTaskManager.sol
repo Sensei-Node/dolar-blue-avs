@@ -81,13 +81,13 @@ contract IncredibleSquaringTaskManager is
     /* FUNCTIONS */
     // NOTE: this function creates new task, assigns it a taskId
     function createNewTask(
-        uint256 DolarDatetime,
+        uint256 dolarDatetime,
         uint32 quorumThresholdPercentage,
         bytes calldata quorumNumbers
     ) external onlyTaskGenerator {
         // create a new task struct
         Task memory newTask;
-        newTask.DolarDatetime = DolarDatetime;
+        newTask.dolarDatetime = dolarDatetime;
         newTask.taskCreatedBlock = uint32(block.number);
         newTask.quorumThresholdPercentage = quorumThresholdPercentage;
         newTask.quorumNumbers = quorumNumbers;
@@ -180,7 +180,7 @@ contract IncredibleSquaringTaskManager is
         BN254.G1Point[] memory pubkeysOfNonSigningOperators
     ) external {
         uint32 referenceTaskIndex = taskResponse.referenceTaskIndex;
-        uint256 DolarDatetime = task.DolarDatetime;
+        uint256 dolarDatetime = task.dolarDatetime;
         // some logical checks
         require(
             allTaskResponses[referenceTaskIndex] != bytes32(0),
@@ -204,9 +204,9 @@ contract IncredibleSquaringTaskManager is
         );
 
         // logic for checking whether challenge is valid or not
-        uint256 actualSquaredOutput = DolarDatetime * DolarDatetime;
+        uint256 actualSquaredOutput = dolarDatetime * dolarDatetime;
         bool isResponseCorrect = (actualSquaredOutput ==
-            taskResponse.numberSquared);
+            taskResponse.dolarDatetime);
 
         // if response was correct, no slashing happens so we return
         if (isResponseCorrect == true) {

@@ -7,11 +7,11 @@ import (
 
 	mockethclient "github.com/Layr-Labs/eigensdk-go/chainio/mocks"
 	sdklogging "github.com/Layr-Labs/eigensdk-go/logging"
-	aggtypes "github.com/Layr-Labs/incredible-squaring-avs/aggregator/types"
-	"github.com/Layr-Labs/incredible-squaring-avs/challenger/mocks"
-	chtypes "github.com/Layr-Labs/incredible-squaring-avs/challenger/types"
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
-	chainiomocks "github.com/Layr-Labs/incredible-squaring-avs/core/chainio/mocks"
+	aggtypes "github.com/Sensei-Node/dolar-blue-avs/aggregator/types"
+	"github.com/Sensei-Node/dolar-blue-avs/challenger/mocks"
+	chtypes "github.com/Sensei-Node/dolar-blue-avs/challenger/types"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	chainiomocks "github.com/Sensei-Node/dolar-blue-avs/core/chainio/mocks"
 	"github.com/ethereum/go-ethereum/common"
 	gethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/stretchr/testify/assert"
@@ -26,7 +26,7 @@ var MOCK_OPERATOR_BLS_PRIVATE_KEY_STRING = "50"
 type MockTask struct {
 	TaskNum        uint32
 	BlockNumber    uint32
-	NumberToSquare uint32
+	DolarDatetime uint32
 }
 
 func TestCallChallengeModule(t *testing.T) {

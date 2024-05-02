@@ -9,8 +9,8 @@ import (
 
 	"github.com/urfave/cli"
 
-	"github.com/Layr-Labs/incredible-squaring-avs/challenger"
-	"github.com/Layr-Labs/incredible-squaring-avs/core/config"
+	"github.com/Sensei-Node/dolar-blue-avs/challenger"
+	"github.com/Sensei-Node/dolar-blue-avs/core/config"
 )
 
 var (

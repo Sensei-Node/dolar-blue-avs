@@ -7,13 +7,13 @@ import (
 
 	ethclient "github.com/Layr-Labs/eigensdk-go/chainio/clients/eth"
 	"github.com/Layr-Labs/eigensdk-go/logging"
-	"github.com/Layr-Labs/incredible-squaring-avs/common"
-	"github.com/Layr-Labs/incredible-squaring-avs/core/config"
+	"github.com/Sensei-Node/dolar-blue-avs/common"
+	"github.com/Sensei-Node/dolar-blue-avs/core/config"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 
-	"github.com/Layr-Labs/incredible-squaring-avs/challenger/types"
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
-	"github.com/Layr-Labs/incredible-squaring-avs/core/chainio"
+	"github.com/Sensei-Node/dolar-blue-avs/challenger/types"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	"github.com/Sensei-Node/dolar-blue-avs/core/chainio"
 )
 
 type Challenger struct {

@@ -2,8 +2,9 @@ package aggregator
 
 import (
 	"context"
-	"math/big"
 	"testing"
+	"time"
+	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/assert"
@@ -11,9 +12,9 @@ import (
 
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	sdktypes "github.com/Layr-Labs/eigensdk-go/types"
-	"github.com/Layr-Labs/incredible-squaring-avs/aggregator/types"
-	cstaskmanager "github.com/Layr-Labs/incredible-squaring-avs/contracts/bindings/IncredibleSquaringTaskManager"
-	"github.com/Layr-Labs/incredible-squaring-avs/core"
+	"github.com/Sensei-Node/dolar-blue-avs/aggregator/types"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	"github.com/Sensei-Node/dolar-blue-avs/core"
 )
 
 func TestProcessSignedTaskResponse(t *testing.T) {
@@ -22,7 +23,9 @@ func TestProcessSignedTaskResponse(t *testing.T) {
 
 	var TASK_INDEX = uint32(0)
 	var BLOCK_NUMBER = uint32(100)
-	var NUMBER_TO_SQUARE = uint32(3)
+	currentTime := time.Now()
+	unixTimestamp := currentTime.Unix()
+	var DATETIME_CONVERSION = uint32(unixTimestamp)
 
 	MOCK_OPERATOR_BLS_PRIVATE_KEY, err := bls.NewPrivateKey(MOCK_OPERATOR_BLS_PRIVATE_KEY_STRING)
 	assert.Nil(t, err)
@@ -45,7 +48,7 @@ func TestProcessSignedTaskResponse(t *testing.T) {
 	signedTaskResponse, err := createMockSignedTaskResponse(MockTask{
 		TaskNum:        TASK_INDEX,
 		BlockNumber:    BLOCK_NUMBER,
-		NumberToSquare: NUMBER_TO_SQUARE,
+		DolarDatetime:  DATETIME_CONVERSION,
 	}, *MOCK_OPERATOR_KEYPAIR)
 	assert.Nil(t, err)
 	signedTaskResponseDigest, err := core.GetTaskResponseDigest(&signedTaskResponse.TaskResponse)
@@ -62,10 +65,11 @@ func TestProcessSignedTaskResponse(t *testing.T) {
 
 // mocks an operator signing on a task response
 func createMockSignedTaskResponse(mockTask MockTask, keypair bls.KeyPair) (*SignedTaskResponse, error) {
-	numberToSquareBigInt := big.NewInt(int64(mockTask.NumberToSquare))
+	expectedDolarResponse, err := getDolarValue(mockTask.DolarDatetime)
+	expectedDolarResponseBigInt := big.NewInt(int64(expectedDolarResponse))
 	taskResponse := &cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse{
 		ReferenceTaskIndex: mockTask.TaskNum,
-		NumberSquared:      numberToSquareBigInt.Mul(numberToSquareBigInt, numberToSquareBigInt),
+		DolarDatetime:      expectedDolarResponseBigInt,
 	}
 	taskResponseHash, err := core.GetTaskResponseDigest(taskResponse)
 	if err != nil {
