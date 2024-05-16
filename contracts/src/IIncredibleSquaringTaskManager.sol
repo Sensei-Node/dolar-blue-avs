@@ -58,7 +58,7 @@ interface IIncredibleSquaringTaskManager {
     // FUNCTIONS
     // NOTE: this function creates new task.
     function createNewTask(
-        uint256 dolarDatetime,
+        uint32 dolarDatetime,
         uint32 quorumThresholdPercentage,
         bytes calldata quorumNumbers
     ) external;

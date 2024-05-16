@@ -28,9 +28,9 @@ var MOCK_OPERATOR_STAKE = big.NewInt(100)
 var MOCK_OPERATOR_BLS_PRIVATE_KEY_STRING = "50"
 
 type MockTask struct {
-	TaskNum        uint32
-	BlockNumber    uint32
-	DolarDatetime  uint32
+	TaskNum       uint32
+	BlockNumber   uint32
+	DolarDatetime uint32
 }
 
 func TestSendNewTask(t *testing.T) {
@@ -64,7 +64,7 @@ func TestSendNewTask(t *testing.T) {
 	var DATETIME_CONVERSION_BIG_INT = big.NewInt(int64(unixTimestamp))
 
 	mockAvsWriterer.EXPECT().SendNewTaskGetDolarValue(
-		context.Background(), DATETIME_CONVERSION_BIG_INT, types.QUORUM_THRESHOLD_NUMERATOR, types.QUORUM_NUMBERS,
+		context.Background(), DATETIME_CONVERSION, types.QUORUM_THRESHOLD_NUMERATOR, types.QUORUM_NUMBERS,
 	).Return(mocks.MockSendNewTaskGetDolarValueCall(BLOCK_NUMBER, TASK_INDEX, DATETIME_CONVERSION))
 
 	// 100 blocks, each takes 12 seconds. We hardcode for now since aggregator also hardcodes this value
@@ -79,7 +79,7 @@ func TestSendNewTask(t *testing.T) {
 }
 
 func createMockAggregator(
-	mockCtrl *gomock.Controller, operatorPubkeyDict map[bls.OperatorId]types.OperatorInfo,
+	mockCtrl *gomock.Controller, operatorPubkeyDict map[sdktypes.OperatorId]types.OperatorInfo,
 ) (*Aggregator, *chainiomocks.MockAvsWriterer, *blsaggservmock.MockBlsAggregationService, error) {
 	logger := sdklogging.NewNoopLogger()
 	mockAvsWriter := chainiomocks.NewMockAvsWriterer(mockCtrl)

@@ -2,7 +2,6 @@ package chainio
 
 import (
 	"context"
-	"math/big"
 
 	gethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -11,6 +10,7 @@ import (
 	"github.com/Layr-Labs/eigensdk-go/chainio/clients/eth"
 	"github.com/Layr-Labs/eigensdk-go/chainio/txmgr"
 	logging "github.com/Layr-Labs/eigensdk-go/logging"
+	sdktypes "github.com/Layr-Labs/eigensdk-go/types"
 
 	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
 	"github.com/Sensei-Node/dolar-blue-avs/core/config"
@@ -21,9 +21,9 @@ type AvsWriterer interface {
 
 	SendNewTaskGetDolarValue(
 		ctx context.Context,
-		timestamp *big.Int,
-		quorumThresholdPercentage uint32,
-		quorumNumbers []byte,
+		timestamp uint32,
+		quorumThresholdPercentage sdktypes.QuorumThresholdPercentage,
+		quorumNumbers []sdktypes.QuorumNum,
 	) (cstaskmanager.IIncredibleSquaringTaskManagerTask, uint32, error)
 	RaiseChallenge(
 		ctx context.Context,
@@ -75,7 +75,7 @@ func NewAvsWriter(avsRegistryWriter avsregistry.AvsRegistryWriter, avsServiceBin
 }
 
 // returns the tx receipt, as well as the task index (which it gets from parsing the tx receipt logs)
-func (w *AvsWriter) SendNewTaskGetDolarValue(ctx context.Context, timestamp *big.Int, quorumThresholdPercentage uint32, quorumNumbers []byte) (cstaskmanager.IIncredibleSquaringTaskManagerTask, uint32, error) {
+func (w *AvsWriter) SendNewTaskGetDolarValue(ctx context.Context, timestamp uint32, quorumThresholdPercentage uint32, quorumNumbers []byte) (cstaskmanager.IIncredibleSquaringTaskManagerTask, uint32, error) {
 	txOpts, err := w.TxMgr.GetNoSendTxOpts()
 	if err != nil {
 		w.logger.Errorf("Error getting tx opts")

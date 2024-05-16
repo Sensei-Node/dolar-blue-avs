@@ -24,8 +24,8 @@ var MOCK_OPERATOR_BLS_PRIVATE_KEY_STRING = "50"
 
 // @samlaf I tried pulling the MockTask struct froma ggregator_test but getting error: "undefined: aggregator.MockTask"
 type MockTask struct {
-	TaskNum        uint32
-	BlockNumber    uint32
+	TaskNum       uint32
+	BlockNumber   uint32
 	DolarDatetime uint32
 }
 
@@ -40,7 +40,7 @@ func TestCallChallengeModule(t *testing.T) {
 	const BLOCK_NUMBER = uint32(100)
 
 	challenger.tasks[TASK_INDEX] = cstaskmanager.IIncredibleSquaringTaskManagerTask{
-		DolarDatetime:         big.NewInt(3),
+		DolarDatetime:             big.NewInt(3),
 		TaskCreatedBlock:          1000,
 		QuorumNumbers:             aggtypes.QUORUM_NUMBERS,
 		QuorumThresholdPercentage: aggtypes.QUORUM_THRESHOLD_NUMERATOR,
@@ -49,7 +49,7 @@ func TestCallChallengeModule(t *testing.T) {
 	challenger.taskResponses[TASK_INDEX] = chtypes.TaskResponseData{
 		TaskResponse: cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse{
 			ReferenceTaskIndex: TASK_INDEX,
-			NumberSquared:      big.NewInt(2),
+			DolarDatetime:      big.NewInt(2),
 		},
 		TaskResponseMetadata: cstaskmanager.IIncredibleSquaringTaskManagerTaskResponseMetadata{
 			TaskResponsedBlock: 1001,
@@ -82,7 +82,7 @@ func TestRaiseChallenge(t *testing.T) {
 	const BLOCK_NUMBER = uint32(100)
 
 	challenger.tasks[TASK_INDEX] = cstaskmanager.IIncredibleSquaringTaskManagerTask{
-		DolarDatetime:         big.NewInt(3),
+		DolarDatetime:             big.NewInt(3),
 		TaskCreatedBlock:          1000,
 		QuorumNumbers:             aggtypes.QUORUM_NUMBERS,
 		QuorumThresholdPercentage: aggtypes.QUORUM_THRESHOLD_NUMERATOR,
@@ -122,7 +122,7 @@ func TestProcessTaskResponseLog(t *testing.T) {
 	const TASK_INDEX = 1
 
 	challenger.tasks[TASK_INDEX] = cstaskmanager.IIncredibleSquaringTaskManagerTask{
-		DolarDatetime:         big.NewInt(3),
+		DolarDatetime:             big.NewInt(3),
 		TaskCreatedBlock:          1000,
 		QuorumNumbers:             aggtypes.QUORUM_NUMBERS,
 		QuorumThresholdPercentage: aggtypes.QUORUM_THRESHOLD_NUMERATOR,

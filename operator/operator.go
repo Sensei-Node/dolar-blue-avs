@@ -2,12 +2,13 @@ package operator
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math/big"
+	"net/http"
 	"os"
-    "io/ioutil"
-    "log"
-    "time"
+	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -315,16 +316,17 @@ func (o *Operator) ProcessNewTaskCreatedLog(newTaskCreatedLog *cstaskmanager.Con
 		"quorumNumbers", newTaskCreatedLog.Task.QuorumNumbers,
 		"QuorumThresholdPercentage", newTaskCreatedLog.Task.QuorumThresholdPercentage,
 	)
-	dolarResponse, err := aggregator.getDolarValue(newTaskCreatedLog.Task.DolarDatetime.Int32())
+	dolarDatetime := newTaskCreatedLog.Task.DolarDatetime
+	dolarResponse, err := o.getDolarValue(uint32(dolarDatetime.Uint64()))
 	if err != nil {
 		fmt.Println("Error:", err)
-		return
+		return nil
 	}
 	// Print the response
 	fmt.Println("Dolar Response:", dolarResponse)
 	taskResponse := &cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse{
 		ReferenceTaskIndex: newTaskCreatedLog.TaskIndex,
-		DolarDatetime:      dolarResponse,
+		DolarDatetime:      big.NewInt(int64(dolarResponse)),
 	}
 	return taskResponse
 }
@@ -343,4 +345,46 @@ func (o *Operator) SignTaskResponse(taskResponse *cstaskmanager.IIncredibleSquar
 	}
 	o.logger.Debug("Signed task response", "signedTaskResponse", signedTaskResponse)
 	return signedTaskResponse, nil
+}
+
+type DolarResponse struct {
+	Oficial struct {
+		ValueAvg  float64 `json:"value_avg"`
+		ValueSell float64 `json:"value_sell"`
+		ValueBuy  float64 `json:"value_buy"`
+	} `json:"oficial"`
+	Blue struct {
+		ValueAvg  float64 `json:"value_avg"`
+		ValueSell float64 `json:"value_sell"`
+		ValueBuy  float64 `json:"value_buy"`
+	} `json:"blue"`
+}
+
+// Function to get dollar value from the API
+func (o *Operator) getDolarValue(timestamp uint32) (uint32, error) {
+	// Convert to api format
+	t := time.Unix(int64(timestamp), 0)
+	dateString := t.Format("2006-01-02")
+
+	// Make API call
+	resp, err := http.Get("https://api.bluelytics.com.ar/v2/historical?day=" + dateString + "&symbol=dolar")
+	if err != nil {
+		return 0, err
+	}
+	defer resp.Body.Close()
+
+	// Read response body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return 0, err
+	}
+
+	// Unmarshal JSON response
+	var data DolarResponse
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return 0, err
+	}
+
+	return uint32(data.Blue.ValueAvg), nil
 }

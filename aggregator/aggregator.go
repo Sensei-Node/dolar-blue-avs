@@ -2,12 +2,12 @@ package aggregator
 
 import (
 	"context"
+	"encoding/json"
+	"io/ioutil"
 	"math/big"
+	"net/http"
 	"sync"
 	"time"
-	"net/http"
-    "io/ioutil"
-	"encoding/json"
 
 	"github.com/Layr-Labs/eigensdk-go/logging"
 
@@ -214,7 +214,7 @@ func (agg *Aggregator) sendAggregatedResponseToContract(blsAggServiceResp blsagg
 func (agg *Aggregator) sendNewTask(unixTimestamp *big.Int) error {
 	agg.logger.Info("Aggregator sending new task", "dolar timestamp", unixTimestamp)
 	// Send number to square to the task manager contract
-	newTask, taskIndex, err := agg.avsWriter.SendNewTaskGetDolarValue(context.Background(), unixTimestamp, types.QUORUM_THRESHOLD_NUMERATOR, types.QUORUM_NUMBERS)
+	newTask, taskIndex, err := agg.avsWriter.SendNewTaskGetDolarValue(context.Background(), uint32(unixTimestamp.Uint64()), types.QUORUM_THRESHOLD_NUMERATOR, types.QUORUM_NUMBERS)
 	if err != nil {
 		agg.logger.Error("Aggregator failed to send number to square", "err", err)
 		return err
