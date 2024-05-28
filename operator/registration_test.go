@@ -9,7 +9,7 @@ import (
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	sdklogging "github.com/Layr-Labs/eigensdk-go/logging"
 
-	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/OracleTaskManager"
 	"github.com/Sensei-Node/dolar-blue-avs/metrics"
 	"github.com/Sensei-Node/dolar-blue-avs/tests"
 )
@@ -47,7 +47,7 @@ func createMockOperator() (*Operator, error) {
 		blsKeypair:         operatorKeypair,
 		metricsReg:         reg,
 		metrics:            noopMetrics,
-		newTaskCreatedChan: make(chan *cstaskmanager.ContractIncredibleSquaringTaskManagerNewTaskCreated),
+		newTaskCreatedChan: make(chan *cstaskmanager.ContractOracleTaskManagerNewTaskCreated),
 		operatorId:         MOCK_OPERATOR_ID,
 	}
 	return operator, nil

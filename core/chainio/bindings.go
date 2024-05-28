@@ -10,13 +10,13 @@ import (
 
 	regcoord "github.com/Layr-Labs/eigensdk-go/contracts/bindings/RegistryCoordinator"
 	erc20mock "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/ERC20Mock"
-	csservicemanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringServiceManager"
-	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	csservicemanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/OracleServiceManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/OracleTaskManager"
 )
 
 type AvsManagersBindings struct {
-	TaskManager    *cstaskmanager.ContractIncredibleSquaringTaskManager
-	ServiceManager *csservicemanager.ContractIncredibleSquaringServiceManager
+	TaskManager    *cstaskmanager.ContractOracleTaskManager
+	ServiceManager *csservicemanager.ContractOracleServiceManager
 	ethClient      eth.EthClient
 	logger         logging.Logger
 }
@@ -30,7 +30,7 @@ func NewAvsManagersBindings(registryCoordinatorAddr, operatorStateRetrieverAddr 
 	if err != nil {
 		return nil, err
 	}
-	contractServiceManager, err := csservicemanager.NewContractIncredibleSquaringServiceManager(serviceManagerAddr, ethclient)
+	contractServiceManager, err := csservicemanager.NewContractOracleServiceManager(serviceManagerAddr, ethclient)
 	if err != nil {
 		logger.Error("Failed to fetch IServiceManager contract", "err", err)
 		return nil, err
@@ -41,7 +41,7 @@ func NewAvsManagersBindings(registryCoordinatorAddr, operatorStateRetrieverAddr 
 		logger.Error("Failed to fetch TaskManager address", "err", err)
 		return nil, err
 	}
-	contractTaskManager, err := cstaskmanager.NewContractIncredibleSquaringTaskManager(taskManagerAddr, ethclient)
+	contractTaskManager, err := cstaskmanager.NewContractOracleTaskManager(taskManagerAddr, ethclient)
 	if err != nil {
 		logger.Error("Failed to fetch IIncredibleSquaringTaskManager contract", "err", err)
 		return nil, err

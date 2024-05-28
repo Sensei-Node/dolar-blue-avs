@@ -2,18 +2,17 @@
 pragma solidity ^0.8.9;
 
 import "@eigenlayer/contracts/libraries/BytesLib.sol";
-import "./IIncredibleSquaringTaskManager.sol";
+import "./IOracleTaskManager.sol";
 import "@eigenlayer-middleware/src/ServiceManagerBase.sol";
 
 /**
  * @title Primary entrypoint for procuring services from IncredibleSquaring.
  * @author Layr Labs, Inc.
  */
-contract IncredibleSquaringServiceManager is ServiceManagerBase {
+contract OracleServiceManager is ServiceManagerBase {
     using BytesLib for bytes;
 
-    IIncredibleSquaringTaskManager
-        public immutable incredibleSquaringTaskManager;
+    IOracleTaskManager public immutable incredibleSquaringTaskManager;
 
     /// @notice when applied to a function, ensures that the function is only callable by the `registryCoordinator`.
     modifier onlyIncredibleSquaringTaskManager() {
@@ -28,7 +27,7 @@ contract IncredibleSquaringServiceManager is ServiceManagerBase {
         IDelegationManager _delegationManager,
         IRegistryCoordinator _registryCoordinator,
         IStakeRegistry _stakeRegistry,
-        IIncredibleSquaringTaskManager _incredibleSquaringTaskManager
+        IOracleTaskManager _incredibleSquaringTaskManager
     )
         ServiceManagerBase(
             _delegationManager,

@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	aggtypes "github.com/Sensei-Node/dolar-blue-avs/aggregator/types"
-	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/OracleTaskManager"
 )
 
 func TestOperator(t *testing.T) {
@@ -19,9 +19,9 @@ func TestOperator(t *testing.T) {
 
 	t.Run("ProcessNewTaskCreatedLog", func(t *testing.T) {
 		DolarDatetime := big.NewInt(time.Now().Unix())
-		newTaskCreatedLog := &cstaskmanager.ContractIncredibleSquaringTaskManagerNewTaskCreated{
+		newTaskCreatedLog := &cstaskmanager.ContractOracleTaskManagerNewTaskCreated{
 			TaskIndex: taskIndex,
-			Task: cstaskmanager.IIncredibleSquaringTaskManagerTask{
+			Task: cstaskmanager.IOracleTaskManagerTask{
 				DolarDatetime:             DolarDatetime,
 				TaskCreatedBlock:          1000,
 				QuorumNumbers:             aggtypes.QUORUM_NUMBERS,
@@ -34,7 +34,7 @@ func TestOperator(t *testing.T) {
 		if err != nil {
 			t.Error("Error getting dolar value")
 		}
-		want := &cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse{
+		want := &cstaskmanager.IOracleTaskManagerTaskResponse{
 			ReferenceTaskIndex: taskIndex,
 			DolarDatetime:      big.NewInt(int64(dolarValueWant)),
 		}
@@ -47,9 +47,9 @@ func TestOperator(t *testing.T) {
 		var DolarDatetime = big.NewInt(time.Now().Unix())
 
 		// new task event
-		newTaskCreatedEvent := &cstaskmanager.ContractIncredibleSquaringTaskManagerNewTaskCreated{
+		newTaskCreatedEvent := &cstaskmanager.ContractOracleTaskManagerNewTaskCreated{
 			TaskIndex: taskIndex,
-			Task: cstaskmanager.IIncredibleSquaringTaskManagerTask{
+			Task: cstaskmanager.IOracleTaskManagerTask{
 				DolarDatetime:             DolarDatetime,
 				TaskCreatedBlock:          1000,
 				QuorumNumbers:             aggtypes.QUORUM_NUMBERS,
@@ -69,7 +69,7 @@ func TestOperator(t *testing.T) {
 		}
 
 		signedTaskResponse := &aggregator.SignedTaskResponse{
-			TaskResponse: cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse{
+			TaskResponse: cstaskmanager.IOracleTaskManagerTaskResponse{
 				ReferenceTaskIndex: taskIndex,
 				DolarDatetime:      big.NewInt(int64(dolarValueWant)),
 			},

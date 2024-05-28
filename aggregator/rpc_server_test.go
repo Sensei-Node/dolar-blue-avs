@@ -2,9 +2,9 @@ package aggregator
 
 import (
 	"context"
+	"math/big"
 	"testing"
 	"time"
-	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/assert"
@@ -13,7 +13,7 @@ import (
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	sdktypes "github.com/Layr-Labs/eigensdk-go/types"
 	"github.com/Sensei-Node/dolar-blue-avs/aggregator/types"
-	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/OracleTaskManager"
 	"github.com/Sensei-Node/dolar-blue-avs/core"
 )
 
@@ -46,9 +46,9 @@ func TestProcessSignedTaskResponse(t *testing.T) {
 	assert.Nil(t, err)
 
 	signedTaskResponse, err := createMockSignedTaskResponse(MockTask{
-		TaskNum:        TASK_INDEX,
-		BlockNumber:    BLOCK_NUMBER,
-		DolarDatetime:  DATETIME_CONVERSION,
+		TaskNum:       TASK_INDEX,
+		BlockNumber:   BLOCK_NUMBER,
+		DolarDatetime: DATETIME_CONVERSION,
 	}, *MOCK_OPERATOR_KEYPAIR)
 	assert.Nil(t, err)
 	signedTaskResponseDigest, err := core.GetTaskResponseDigest(&signedTaskResponse.TaskResponse)
@@ -67,7 +67,7 @@ func TestProcessSignedTaskResponse(t *testing.T) {
 func createMockSignedTaskResponse(mockTask MockTask, keypair bls.KeyPair) (*SignedTaskResponse, error) {
 	expectedDolarResponse, err := getDolarValue(mockTask.DolarDatetime)
 	expectedDolarResponseBigInt := big.NewInt(int64(expectedDolarResponse))
-	taskResponse := &cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse{
+	taskResponse := &cstaskmanager.IOracleTaskManagerTaskResponse{
 		ReferenceTaskIndex: mockTask.TaskNum,
 		DolarDatetime:      expectedDolarResponseBigInt,
 	}

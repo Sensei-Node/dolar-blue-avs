@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"math/big"
 
-	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/OracleTaskManager"
 	"github.com/ethereum/go-ethereum/common"
 	gethtypes "github.com/ethereum/go-ethereum/core/types"
 )
@@ -76,6 +76,6 @@ func MockTaskResponseLog() gethtypes.Log {
 	}
 }
 
-func MockTaskResponseReferenceTaskIndex(taskResponse cstaskmanager.IIncredibleSquaringTaskManagerTaskResponse) uint32 {
+func MockTaskResponseReferenceTaskIndex(taskResponse cstaskmanager.IOracleTaskManagerTaskResponse) uint32 {
 	return taskResponse.ReferenceTaskIndex
 }

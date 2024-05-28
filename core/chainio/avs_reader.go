@@ -11,7 +11,7 @@ import (
 	logging "github.com/Layr-Labs/eigensdk-go/logging"
 
 	erc20mock "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/ERC20Mock"
-	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/OracleTaskManager"
 	"github.com/Sensei-Node/dolar-blue-avs/core/config"
 )
 

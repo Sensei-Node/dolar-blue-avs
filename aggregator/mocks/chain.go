@@ -6,14 +6,14 @@ import (
 	opstateretriever "github.com/Layr-Labs/eigensdk-go/contracts/bindings/OperatorStateRetriever"
 	"github.com/Layr-Labs/eigensdk-go/crypto/bls"
 	"github.com/Sensei-Node/dolar-blue-avs/aggregator/types"
-	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/IncredibleSquaringTaskManager"
+	cstaskmanager "github.com/Sensei-Node/dolar-blue-avs/contracts/bindings/OracleTaskManager"
 )
 
 // ====== TaskManager Mocks ======
 
-func MockSendNewTaskGetDolarValueCall(blockNum, taskNum, unixTimestamp uint32) (cstaskmanager.IIncredibleSquaringTaskManagerTask, uint32, error) {
-	task := cstaskmanager.IIncredibleSquaringTaskManagerTask{
-		DolarDatetime:         big.NewInt(int64(unixTimestamp)),
+func MockSendNewTaskGetDolarValueCall(blockNum, taskNum, unixTimestamp uint32) (cstaskmanager.IOracleTaskManagerTask, uint32, error) {
+	task := cstaskmanager.IOracleTaskManagerTask{
+		DolarDatetime:             big.NewInt(int64(unixTimestamp)),
 		TaskCreatedBlock:          blockNum,
 		QuorumNumbers:             types.QUORUM_NUMBERS,
 		QuorumThresholdPercentage: types.QUORUM_THRESHOLD_NUMERATOR,
